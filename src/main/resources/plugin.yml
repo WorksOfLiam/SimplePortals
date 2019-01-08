@@ -1,0 +1,37 @@
+name: SimplePortals
+main: com.worksofbarry.SimplePortals.SimplePortals
+version: 1.0.0
+api-version: 1.13
+commands:
+  warp:
+    description: Create warps.
+    usage: "Usage: '/warp'"
+    permission: simpleportals.warp
+  portal:
+    description: Create portals.
+    usage: "Usage: '/portal'"
+    permission: simpleportals.portal
+  spawn:
+    description: Spawn command.
+    usage: "Usage: '/spawn'"
+    permission: simpleportals.spawn
+  worlds:
+    description: World command.
+    usage: "Usage: '/worlds'"
+    permission: simpleportals.worlds
+  setgm:
+    description: Set gamemode command.
+    usage: "Usage: '/setgm'"
+    permission: simpleportals.worlds
+    
+permissions:
+  simpleportals.warp:
+    description: Gives access to warp commands
+  simpleportals.portal:
+    description: Gives access to portal commands
+  simpleportals.spawn:
+    description: Teleport to spawn.
+  simpleportals.spawnset:
+    description: Change spawn point.
+  simpleportals.worlds:
+    description: Manage worlds.
