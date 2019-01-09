@@ -75,13 +75,17 @@ public class PlayerListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
     	Player player = event.getPlayer();
     	Block block = event.getClickedBlock();
-    	
-    	if (block.getType() == Material.ENDER_CHEST) {
-    		if (player.getGameMode() == GameMode.CREATIVE) {
-    			player.sendMessage(ChatColor.RED + "Cannot access ender chest while in creative mode.");
-    			event.setCancelled(true);
-    		}
-    	}
+
+        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+	    	if (!block.equals(null)) {
+		    	if (block.getType().equals(Material.ENDER_CHEST)) {
+		    		if (player.getGameMode().equals(GameMode.CREATIVE)) {
+		    			player.sendMessage(ChatColor.RED + "Cannot access ender chest while in creative mode.");
+		    			event.setCancelled(true);
+		    		}
+		    	}
+	    	}
+        }
     }
 }
 
