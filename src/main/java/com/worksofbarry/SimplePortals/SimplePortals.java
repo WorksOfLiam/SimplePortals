@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -51,6 +52,12 @@ public class SimplePortals extends JavaPlugin {
 		ConfigurationSection list;
 		Warp warp;
 		Portal portal;
+
+    	List<String> WorldNames = new ArrayList<String>();
+		for (World world : Bukkit.getWorlds()) {
+			WorldNames.add(world.getName());
+		}
+		getConfig().set("worlds", WorldNames);
 		
 		list = getConfig().createSection("spawn");
 		list.set("world", Spawn.SpawnPoint.getWorld().getName());
@@ -71,22 +78,21 @@ public class SimplePortals extends JavaPlugin {
 			list.set(key + ".ya", warp.GetPoint().getYaw());
 		}
 
+		list = getConfig().createSection("portals");
 		for (String key : Portal.List.keySet()) {
 			portal = Portal.List.get(key);
 			list.set(key + ".pos.world", portal.GetPortalLocation().getWorld().getName());
 			list.set(key + ".pos.x", portal.GetPortalLocation().getX());
 			list.set(key + ".pos.y", portal.GetPortalLocation().getY());
 			list.set(key + ".pos.z", portal.GetPortalLocation().getZ());
-			list.set(key + ".pos.p", portal.GetPortalLocation().getPitch());
-			list.set(key + ".pos.ya", portal.GetPortalLocation().getYaw());
 			list.set(key + ".warp", portal.GetWarpName());
 		}
+		
 
-    	List<String> WorldNames = new ArrayList<String>();
-		for (World world : Bukkit.getWorlds()) {
-			WorldNames.add(world.getName());
+		list = getConfig().createSection("gamemodes");
+		for (String worldName : WorldGamemode.WorldList.keySet()) {
+			list.set(worldName, WorldGamemode.WorldList.get(worldName).toString());
 		}
-		getConfig().set("worlds", WorldNames);
 		
 		saveConfig();
 	}
@@ -94,6 +100,13 @@ public class SimplePortals extends JavaPlugin {
 	public void Load() {
 		Location location;
 		ConfigurationSection list;
+		
+		if (getConfig().contains("worlds")) {
+			for (String WorldName : getConfig().getStringList("worlds")) {
+				System.out.println(WorldName);
+				new WorldCreator(WorldName).createWorld();
+			}
+		}
 
 		if (getConfig().contains("spawn")) {
 			list = getConfig().getConfigurationSection("spawn");
@@ -135,17 +148,15 @@ public class SimplePortals extends JavaPlugin {
 						Double.valueOf(list.getDouble(key + ".pos.x")),
 						Double.valueOf(list.getDouble(key + ".pos.y")),
 						Double.valueOf(list.getDouble(key + ".pos.z")));
-				location.setPitch(Float.valueOf(list.getString(key + ".pos.p")));
-				location.setYaw(Float.valueOf(list.getString(key + ".pos.ya")));
 				
 				Portal.List.put(key, new Portal(location, list.getString(key + ".warp")));
 			}
 		}
 		
-		if (getConfig().contains("worlds")) {
-			for (String WorldName : getConfig().getStringList("worlds")) {
-				System.out.println(WorldName);
-				new WorldCreator(WorldName).createWorld();
+		if (getConfig().contains("gamemodes")) {
+			list = getConfig().getConfigurationSection("gamemodes");
+			for (String key : list.getKeys(false)) {
+            	WorldGamemode.WorldList.put(key, GameMode.valueOf(list.getString(key)));
 			}
 		}
 	}

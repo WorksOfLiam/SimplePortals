@@ -24,17 +24,16 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Location loc;
-    	
-        for (Portal portal : Portal.List.values()) {
-        	if (portal.isStandingOn(event.getTo())) {
-        		loc = portal.GetWarpLocation();
-        		if (loc != null) {
-            		event.getPlayer().teleport(loc);
-        		} else {
-        			event.getPlayer().sendMessage(ChatColor.RED + "Warp " + portal.GetWarpName() + " is missing. Please report this to an admin.");
-        		}
-        		return;
-        	}
+        String key = Portal.LocationString(event.getTo());
+       
+        if (Portal.List.containsKey(key)) {
+    		loc = Portal.List.get(key).GetWarpLocation();
+    		if (loc != null) {
+        		event.getPlayer().teleport(loc);
+    		} else {
+    			event.getPlayer().sendMessage(ChatColor.RED + "Warp is missing. Please report this to an admin.");
+    		}
+    		return;
         }
     }
 
@@ -64,7 +63,8 @@ public class PlayerListener implements Listener {
     		}
     		
     		if (player.getGameMode().equals(GameMode.CREATIVE) && !toGameMode.equals(GameMode.CREATIVE)) {
-    			player.sendMessage(ChatColor.RED + "Inventory clearned as teleported from creative world.");
+    			player.getInventory().clear();
+    			player.sendMessage(ChatColor.RED + "Inventory cleared as teleported from creative world.");
     		}
     		
     		player.setGameMode(toGameMode);
