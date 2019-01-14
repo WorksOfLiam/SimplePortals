@@ -48,7 +48,14 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-    	event.setRespawnLocation(Spawn.SpawnPoint);
+    	Player player = event.getPlayer();
+    	Location bedSpawn = player.getBedSpawnLocation();
+    	
+    	if (bedSpawn != null) {
+    		event.setRespawnLocation(bedSpawn);
+    	} else {
+    		event.setRespawnLocation(Spawn.SpawnPoint);
+    	}
     }
 
     @EventHandler
