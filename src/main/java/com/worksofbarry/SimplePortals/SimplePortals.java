@@ -69,6 +69,7 @@ public class SimplePortals extends JavaPlugin {
 		
 		list = getConfig().createSection("warps");
 		for (String key : Warp.List.keySet()) {
+			System.out.println("Saving warp: " + key);
 			warp = Warp.GetWarp(key);
 			list.set(key + ".world", warp.GetPoint().getWorld().getName());
 			list.set(key + ".x", warp.GetPoint().getX());

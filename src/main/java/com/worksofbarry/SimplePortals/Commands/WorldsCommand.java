@@ -46,15 +46,16 @@ public class WorldsCommand implements CommandExecutor {
 							WorldNames.add(world.getName());
 						}
 
-						if (split.length == 3) {
-							WorldCreator creator = new WorldCreator(split[1]).environment(Environment.NORMAL)
-									.generateStructures(false).type(WorldType.valueOf(split[2].toUpperCase()));
+						if (split.length == 4) {
+							WorldCreator creator = new WorldCreator(split[1]).environment(Environment.valueOf(split[2].toUpperCase()))
+									.generateStructures(false).type(WorldType.valueOf(split[3].toUpperCase()));
 							Bukkit.broadcastMessage(ChatColor.GOLD + "Creating new world " + split[1]);
 							Bukkit.createWorld(creator);
 							Bukkit.broadcastMessage(ChatColor.GOLD + "Created new world " + split[1]);
 						} else {
-							player.sendMessage(ChatColor.RED + "Not enough parameters: /worlds create <name> <type>");
-							player.sendMessage(ChatColor.RED + "<type> can be: NORMAL, LARGE_BIOMES, FLAT, AMPLIFIED");
+							player.sendMessage(ChatColor.RED + "Not enough parameters: /worlds create <name> <env> <type>");
+							player.sendMessage(ChatColor.RED + "<env> can be: NORMAL, LARGE_BIOMES, FLAT, AMPLIFIED");
+							player.sendMessage(ChatColor.RED + "<type> can be: NORMAL, NETHER, THE_END");
 						}
 						break;
 
